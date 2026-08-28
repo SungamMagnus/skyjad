@@ -19,6 +19,36 @@ latches and a switch — 810 x 294, resizable on a fixed aspect. Pitch is a
 bipolar fader rather than a different shape, which is what lets every column
 start on the same line.
 
+## Install
+
+Prebuilt binaries are on the [Releases](https://github.com/SungamMagnus/cloudius/releases)
+page. macOS universal (Apple Silicon and Intel), macOS 11 or later — there is
+no Windows or Linux build.
+
+Copy the plug-ins where your host looks for them:
+
+```
+VST3  ->  ~/Library/Audio/Plug-Ins/VST3/
+AU    ->  ~/Library/Audio/Plug-Ins/Components/
+```
+
+### Clear the quarantine
+
+These builds carry an ad-hoc signature, not an Apple Developer ID. macOS flags
+anything downloaded from the internet as quarantined, and Gatekeeper then
+refuses to load the plug-in — usually **silently**, so it simply never appears
+in your host and nothing explains why. Run this once after installing:
+
+```sh
+xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/Cloudius.vst3
+xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/Components/Cloudius.component
+```
+
+Then restart your host and rescan.
+
+Building from source avoids this altogether — a plug-in you compile yourself is
+never quarantined.
+
 ## Build
 
 Needs CMake ≥ 3.22 and a JUCE checkout (defaults to `/Applications/JUCE`).
