@@ -19,6 +19,13 @@ latches and a switch — 810 x 294, resizable on a fixed aspect. Pitch is a
 bipolar fader rather than a different shape, which is what lets every column
 start on the same line.
 
+![Cloudius panel](docs/panel.png)
+
+*Granular mode. Frozen looping delay below — the recording head greys out in
+the buffer band and Freeze lights.*
+
+![Cloudius panel, looping delay frozen](docs/panel-delay.png)
+
 ## Install
 
 Prebuilt binaries are on the [Releases](https://github.com/SungamMagnus/cloudius/releases)
