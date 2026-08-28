@@ -75,7 +75,7 @@ void CloudiusEditor::buildControls()
     add (Kind::selector, pid::quality, qualityRect(), 0.0f, 4, true);
     add (Kind::latch,    pid::freeze,  freezeRect(),  0.0f, 2);
 
-    add (Kind::latch, pid::limiter, limiterRect(), 0.0f, 2);
+    add (Kind::latch, pid::limiter, limiterBox().expanded (6.0f), 0.0f, 2);
 
     /* Blend. */
     for (int i = 0; i < numBlend; ++i)
@@ -325,12 +325,6 @@ void CloudiusEditor::paint (juce::Graphics& g)
 
     /* ── Blend ───────────────────────────────────────────────────────────── */
     {
-        const bool limiting = ctls[(size_t) kLimiter].param->getValue() > 0.5f;
-        button (g, limiterRect(), limiting, hue::blend, "LIMIT");
-        if (limiting)
-            reductionBar (g, { limiterRect().getX(), 39.0f, limiterRect().getWidth(), 3.0f },
-                          state.reduction.load (std::memory_order_relaxed), hue::blend);
-
         for (int i = 0; i < numBlend; ++i)
         {
             auto* param = ctls[(size_t) (kBlendFader + i)].param;
@@ -350,30 +344,37 @@ void CloudiusEditor::paint (juce::Graphics& g)
               juce::Justification::left, false);
         ledBar (g, 62.0f, y, state.envIn.load (std::memory_order_relaxed) * 3.0f, hue::signal);
 
+        /* The output meter carries the limiter's state - lit when it is
+           guarding the output, grey when the output is running free. */
+        const bool limiting = ctls[(size_t) kLimiter].param->getValue() > 0.5f;
+
         text (g, "OUT", { 124.0f, y - 7.0f, 26.0f, 14.0f }, 8.0f, ink (0.45f),
               juce::Justification::left, false);
-        meter (g, { 150.0f, y - 3.5f, 64.0f, 7.0f },
-               state.envOut.load (std::memory_order_relaxed) * 3.0f, hue::signal);
+        meter (g, outMeterRect(), state.envOut.load (std::memory_order_relaxed) * 3.0f,
+               limiting ? hue::signal : ink (0.30f));
+        checkbox (g, limiterBox(), limiting, hue::signal);
+        text (g, "LIM", { 234.0f, y - 7.0f, 24.0f, 14.0f }, 7.6f,
+              limiting ? hue::signal : ink (0.38f), juce::Justification::left, false);
 
-        text (g, "CLIP", { 228.0f, y - 7.0f, 30.0f, 14.0f }, 8.0f, ink (0.45f),
+        text (g, "CLIP", { 272.0f, y - 7.0f, 30.0f, 14.0f }, 8.0f, ink (0.45f),
               juce::Justification::left, false);
-        lamp (g, 266.0f, y, state.inPeak.load (std::memory_order_relaxed) > 0.99f, hue::clip);
+        lamp (g, 310.0f, y, state.inPeak.load (std::memory_order_relaxed) > 0.99f, hue::clip);
 
-        text (g, "RATE", { 286.0f, y - 7.0f, 34.0f, 14.0f }, 8.0f, ink (0.45f),
+        text (g, "RATE", { 330.0f, y - 7.0f, 34.0f, 14.0f }, 8.0f, ink (0.45f),
               juce::Justification::left, false);
         text (g, hostRate > 0.0 ? "32 kHz from " + juce::String (hostRate / 1000.0, 1) + " kHz"
                                 : juce::String ("32 kHz"),
-              { 320.0f, y - 7.0f, 116.0f, 14.0f }, 8.5f, hue::ink, juce::Justification::left);
+              { 360.0f, y - 7.0f, 112.0f, 14.0f }, 8.5f, hue::ink, juce::Justification::left);
 
-        text (g, "LATENCY", { 450.0f, y - 7.0f, 58.0f, 14.0f }, 8.0f, ink (0.45f),
+        text (g, "LATENCY", { 478.0f, y - 7.0f, 58.0f, 14.0f }, 8.0f, ink (0.45f),
               juce::Justification::left, false);
         text (g, hostRate > 0.0
                      ? juce::String (proc.getLatencySamples() * 1000.0 / hostRate, 1) + " ms"
                      : juce::String ("-"),
-              { 506.0f, y - 7.0f, 58.0f, 14.0f }, 8.5f, hue::ink, juce::Justification::left);
+              { 534.0f, y - 7.0f, 58.0f, 14.0f }, 8.5f, hue::ink, juce::Justification::left);
 
         /* Bottom-right corner: the credit, then the mark. */
-        text (g, "after clouds", { 570.0f, y - 7.0f, 108.0f, 14.0f }, 7.4f, ink (0.32f),
+        text (g, "after clouds", { 606.0f, y - 7.0f, 84.0f, 14.0f }, 7.4f, ink (0.32f),
               juce::Justification::right, false);
         tracked (g, "CLOUDIUS", { contentR - 70.0f, y - 6.0f, 70.0f, 12.0f }, 8.5f,
                  ink (0.62f), 3.2f);

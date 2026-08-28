@@ -59,6 +59,11 @@ constexpr float engineL = 344.0f, engineW = 172.0f;
 
 constexpr float statusY = 264.0f, statusRuleY = 248.0f;
 
+/** The limiter sits with the output meter it protects, and the meter carries
+    the state: coloured when it is on, grey when it is not. */
+inline juce::Rectangle<float> outMeterRect() { return { 152.0f, statusY - 3.5f, 60.0f, 7.0f }; }
+inline juce::Rectangle<float> limiterBox()   { return { 220.0f, statusY - 5.0f, 10.0f, 10.0f }; }
+
 inline float faderX (float columnX, int i) { return columnX + faderStep * (0.5f + (float) i); }
 
 /** Four-position selector rows in the engine column. */
@@ -81,10 +86,6 @@ inline juce::Rectangle<float> bufferRect()  { return { engineL, 196.0f, engineW,
    already using, and the column stops being as wide as the pair of them. */
 inline juce::Rectangle<float> freezeRect()  { return { engineL + engineW - 68.0f, 20.0f, 68.0f, 16.0f }; }
 inline juce::Rectangle<float> trigRect()    { return { engineL + engineW - 68.0f, 40.0f, 68.0f, 16.0f }; }
-
-/** The limiter rides the blend column's title line, as note tracking and the
-    two latches ride theirs. */
-inline juce::Rectangle<float> limiterRect() { return { contentR - 62.0f, 20.0f, 62.0f, 16.0f }; }
 
 /** Note tracking rides the grain column's title line, beside the title. */
 inline juce::Rectangle<float> noteRect()  { return { 214.0f, 20.0f, 80.0f, 17.0f }; }
@@ -135,8 +136,8 @@ void bufferStrip (juce::Graphics&, juce::Rectangle<float>, float head,
 
 void meter (juce::Graphics&, juce::Rectangle<float>, float level, juce::Colour);
 
-/** Gain-reduction tell-tale: fills downward as the limiter pulls. */
-void reductionBar (juce::Graphics&, juce::Rectangle<float>, float reduction, juce::Colour);
+/** Small square that reads as clickable: filled when on, outline when off. */
+void checkbox (juce::Graphics&, juce::Rectangle<float>, bool on, juce::Colour);
 
 /** The module's own display: four bi-colour LEDs as a VU bar. */
 void ledBar (juce::Graphics&, float x, float cy, float level, juce::Colour);
