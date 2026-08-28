@@ -21,8 +21,9 @@ start on the same line.
 
 ![Cloudius panel](docs/panel.png)
 
-*Granular mode. Frozen looping delay below — the recording head greys out in
-the buffer band and Freeze lights.*
+*Granular mode, with the output limiter on — the checkbox beside the OUT meter
+lights the meter when it is guarding the output. Frozen looping delay below:
+the recording head greys out in the buffer band and Freeze lights.*
 
 ![Cloudius panel, looping delay frozen](docs/panel-delay.png)
 
