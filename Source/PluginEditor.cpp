@@ -20,7 +20,8 @@ constexpr int kNoteTrack  = 5;
 constexpr int kMode       = 6;
 constexpr int kQuality    = 7;
 constexpr int kFreeze     = 8;
-constexpr int kBlendFader = 9;
+constexpr int kLimiter    = 9;
+constexpr int kBlendFader = 10;
 } // namespace
 
 CloudiusEditor::CloudiusEditor (CloudiusProcessor& p)
@@ -73,6 +74,8 @@ void CloudiusEditor::buildControls()
     add (Kind::selector, pid::mode,    modeRect(),    0.0f, 4, true);
     add (Kind::selector, pid::quality, qualityRect(), 0.0f, 4, true);
     add (Kind::latch,    pid::freeze,  freezeRect(),  0.0f, 2);
+
+    add (Kind::latch, pid::limiter, limiterRect(), 0.0f, 2);
 
     /* Blend. */
     for (int i = 0; i < numBlend; ++i)
@@ -322,6 +325,12 @@ void CloudiusEditor::paint (juce::Graphics& g)
 
     /* ── Blend ───────────────────────────────────────────────────────────── */
     {
+        const bool limiting = ctls[(size_t) kLimiter].param->getValue() > 0.5f;
+        button (g, limiterRect(), limiting, hue::blend, "LIMIT");
+        if (limiting)
+            reductionBar (g, { limiterRect().getX(), 39.0f, limiterRect().getWidth(), 3.0f },
+                          state.reduction.load (std::memory_order_relaxed), hue::blend);
+
         for (int i = 0; i < numBlend; ++i)
         {
             auto* param = ctls[(size_t) (kBlendFader + i)].param;

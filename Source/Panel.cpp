@@ -1,5 +1,7 @@
 #include "Panel.h"
 
+#include <cmath>
+
 namespace cld::panel
 {
 
@@ -226,6 +228,25 @@ void meter (juce::Graphics& g, juce::Rectangle<float> r, float level, juce::Colo
     g.fillRect (r);
     g.setColour (colour);
     g.fillRect (r.withWidth (r.getWidth() * juce::jlimit (0.0f, 1.0f, level)));
+    g.setColour (ink (0.22f));
+    g.drawRect (r, 1.0f);
+}
+
+void reductionBar (juce::Graphics& g, juce::Rectangle<float> r, float reduction,
+                   juce::Colour colour)
+{
+    g.setColour (ink (0.10f));
+    g.fillRect (r);
+
+    /* 1.0 is untouched; the bar grows as the gain comes down, full at 12 dB.
+       Scaling on the raw gain instead would peg the meter by 2.5 dB. */
+    const float g0 = juce::jlimit (0.001f, 1.0f, reduction);
+    const float amount = juce::jlimit (0.0f, 1.0f, (-20.0f * std::log10 (g0)) / 12.0f);
+    if (amount > 0.001f)
+    {
+        g.setColour (colour);
+        g.fillRect (r.withWidth (r.getWidth() * amount));
+    }
     g.setColour (ink (0.22f));
     g.drawRect (r, 1.0f);
 }

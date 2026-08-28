@@ -6,6 +6,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "CloudsEngine.h"
+#include "Limiter.h"
 #include "Parameters.h"
 
 /** Everything the panel animates, published from the audio thread. */
@@ -19,6 +20,9 @@ struct PanelState
 
     /** Bumps on every trigger the engine takes, so the panel can flash TRIG. */
     std::atomic<int> trigCount { 0 };
+
+    /** Limiter gain reduction, 1 = not working. */
+    std::atomic<float> reduction { 1.0f };
 };
 
 class CloudiusProcessor final : public juce::AudioProcessor
@@ -60,6 +64,7 @@ private:
     void pushParameters();
 
     cld::CloudsEngine engine_;
+    cld::Limiter      limiter_;
     juce::AudioBuffer<float> scratch_;
 
     std::atomic<bool> trigRequest_ { false };
@@ -71,6 +76,7 @@ private:
     juce::AudioParameterChoice* mode_    = nullptr;
     juce::AudioParameterChoice* quality_ = nullptr;
     juce::AudioParameterBool*   freeze_  = nullptr;
+    juce::AudioParameterBool*   limiter_p_ = nullptr;
     juce::AudioParameterChoice* note_    = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CloudiusProcessor)

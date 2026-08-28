@@ -15,6 +15,7 @@ const juce::String blend[numBlend] = { "drywet", "spread", "feedback", "reverb" 
 const juce::String mode    = "mode";
 const juce::String quality = "quality";
 const juce::String freeze  = "freeze";
+const juce::String limiter = "limiter";
 const juce::String noteTrack = "notetrack";
 }
 
@@ -127,6 +128,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout createLayout()
 
     /* The module reads a V/Oct jack; there is no jack here, so the same job
        falls to the MIDI note - either it moves Pitch or it does not. */
+    /* Off by default: the module's own headroom is part of how it sounds, and
+       a DAW has somewhere to put it. Switch it on when you would rather not
+       watch the meters. */
+    layout.add (std::make_unique<juce::AudioParameterBool> (
+        juce::ParameterID { pid::limiter, 1 }, "Limiter", false));
+
     layout.add (std::make_unique<juce::AudioParameterChoice> (
         juce::ParameterID { pid::noteTrack, 1 }, "Note Tracking",
         juce::StringArray { "Off", "Track" }, 0));

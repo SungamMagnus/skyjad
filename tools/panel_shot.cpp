@@ -57,6 +57,8 @@ int main (int argc, char** argv)
         set (p, cld::pid::blend[1], 0.55f);
         set (p, cld::pid::blend[2], 0.3f);
         set (p, cld::pid::blend[3], 0.45f);
+        set (p, cld::pid::limiter, 1.0f);
+        p.panel.reduction.store (0.62f);
         set (p, cld::pid::noteTrack, 1.0f);
         p.panel.head.store (0.62f);
         p.panel.envIn.store (0.21f);

@@ -82,6 +82,10 @@ inline juce::Rectangle<float> bufferRect()  { return { engineL, 196.0f, engineW,
 inline juce::Rectangle<float> freezeRect()  { return { engineL + engineW - 68.0f, 20.0f, 68.0f, 16.0f }; }
 inline juce::Rectangle<float> trigRect()    { return { engineL + engineW - 68.0f, 40.0f, 68.0f, 16.0f }; }
 
+/** The limiter rides the blend column's title line, as note tracking and the
+    two latches ride theirs. */
+inline juce::Rectangle<float> limiterRect() { return { contentR - 62.0f, 20.0f, 62.0f, 16.0f }; }
+
 /** Note tracking rides the grain column's title line, beside the title. */
 inline juce::Rectangle<float> noteRect()  { return { 214.0f, 20.0f, 80.0f, 17.0f }; }
 inline juce::Rectangle<float> noteLabel() { return { 156.0f, 20.0f, 50.0f, 17.0f }; }
@@ -130,6 +134,9 @@ void bufferStrip (juce::Graphics&, juce::Rectangle<float>, float head,
                   juce::Colour);
 
 void meter (juce::Graphics&, juce::Rectangle<float>, float level, juce::Colour);
+
+/** Gain-reduction tell-tale: fills downward as the limiter pulls. */
+void reductionBar (juce::Graphics&, juce::Rectangle<float>, float reduction, juce::Colour);
 
 /** The module's own display: four bi-colour LEDs as a VU bar. */
 void ledBar (juce::Graphics&, float x, float cy, float level, juce::Colour);

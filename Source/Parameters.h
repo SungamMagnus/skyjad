@@ -17,6 +17,7 @@ extern const juce::String blend[numBlend];   // drywet, spread, feedback, reverb
 extern const juce::String mode;
 extern const juce::String quality;
 extern const juce::String freeze;
+extern const juce::String limiter;
 extern const juce::String noteTrack;
 }
 

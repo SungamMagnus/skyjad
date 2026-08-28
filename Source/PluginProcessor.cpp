@@ -29,8 +29,9 @@ CloudiusProcessor::CloudiusProcessor()
     mode_    = dynamic_cast<juce::AudioParameterChoice*> (apvts.getParameter (cld::pid::mode));
     quality_ = dynamic_cast<juce::AudioParameterChoice*> (apvts.getParameter (cld::pid::quality));
     freeze_  = dynamic_cast<juce::AudioParameterBool*>   (apvts.getParameter (cld::pid::freeze));
+    limiter_p_ = dynamic_cast<juce::AudioParameterBool*> (apvts.getParameter (cld::pid::limiter));
     note_    = dynamic_cast<juce::AudioParameterChoice*> (apvts.getParameter (cld::pid::noteTrack));
-    jassert (mode_ && quality_ && freeze_ && note_);
+    jassert (mode_ && quality_ && freeze_ && note_ && limiter_p_);
 }
 
 bool CloudiusProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
@@ -44,6 +45,7 @@ bool CloudiusProcessor::isBusesLayoutSupported (const BusesLayout& layouts) cons
 void CloudiusProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     engine_.prepare (sampleRate, juce::jmax (samplesPerBlock, kControlChunk));
+    limiter_.prepare (sampleRate);
     scratch_.setSize (2, juce::jmax (samplesPerBlock, kControlChunk), false, true, true);
     midiPitch_ = 0.0f;
     heldNotes_ = 0;
@@ -133,6 +135,11 @@ void CloudiusProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mi
         engine_.process (l + offset, r + offset, n);
     }
 
+    if (limiter_p_->get())
+        limiter_.process (l, r, numSamples);
+    else
+        limiter_.reset();
+
     buffer.copyFrom (0, 0, scratch_, 0, 0, numSamples);
     if (numOut > 1)
         buffer.copyFrom (1, 0, scratch_, 1, 0, numSamples);
@@ -145,6 +152,8 @@ void CloudiusProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mi
     panel.head.store   (engine_.bufferPhase(),   std::memory_order_relaxed);
     panel.bufferSeconds.store (engine_.bufferSeconds(), std::memory_order_relaxed);
     panel.trigCount.store (trigs, std::memory_order_relaxed);
+    panel.reduction.store (limiter_p_->get() ? limiter_.readReduction() : 1.0f,
+                           std::memory_order_relaxed);
 
     midi.clear();
 }
