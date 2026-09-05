@@ -27,6 +27,9 @@ the recording head greys out in the buffer band and Freeze lights.*
 
 ![Skýjað panel, looping delay frozen](docs/panel-delay.png)
 
+**[Try it in the browser](https://sungam.art/WebApps/skyjad-web.html)** — the same
+granular engine, compiled to WebAssembly, no plugin host required.
+
 ## Install
 
 Prebuilt binaries are on the [Releases](https://github.com/SungamMagnus/skyjad/releases)
