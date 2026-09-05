@@ -1,4 +1,4 @@
-# Cloudius
+# Skýjað
 
 A VST3 / AU / standalone build of the Mutable Instruments **Clouds** granular
 processor, running the module's own firmware DSP rather than a re-implementation
@@ -19,17 +19,17 @@ latches and a switch — 810 x 294, resizable on a fixed aspect. Pitch is a
 bipolar fader rather than a different shape, which is what lets every column
 start on the same line.
 
-![Cloudius panel](docs/panel.png)
+![Skýjað panel](docs/panel.png)
 
 *Granular mode, with the output limiter on — the checkbox beside the OUT meter
 lights the meter when it is guarding the output. Frozen looping delay below:
 the recording head greys out in the buffer band and Freeze lights.*
 
-![Cloudius panel, looping delay frozen](docs/panel-delay.png)
+![Skýjað panel, looping delay frozen](docs/panel-delay.png)
 
 ## Install
 
-Prebuilt binaries are on the [Releases](https://github.com/SungamMagnus/cloudius/releases)
+Prebuilt binaries are on the [Releases](https://github.com/SungamMagnus/skyjad/releases)
 page. macOS universal (Apple Silicon and Intel), macOS 11 or later — there is
 no Windows or Linux build.
 
@@ -48,8 +48,8 @@ refuses to load the plug-in — usually **silently**, so it simply never appears
 in your host and nothing explains why. Run this once after installing:
 
 ```sh
-xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/Cloudius.vst3
-xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/Components/Cloudius.component
+xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/Skýjað.vst3
+xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/Components/Skýjað.component
 ```
 
 Then restart your host and rescan.
@@ -72,7 +72,7 @@ successful build. On macOS the result is a universal `arm64;x86_64` binary —
 hosts silently skip, with no error to explain it. Worth checking after any build:
 
 ```bash
-lipo -archs ~/Library/Audio/Plug-Ins/VST3/Cloudius.vst3/Contents/MacOS/Cloudius
+lipo -archs ~/Library/Audio/Plug-Ins/VST3/Skýjað.vst3/Contents/MacOS/Skýjað
 ```
 
 It must print `x86_64 arm64`.
@@ -158,5 +158,5 @@ the factory test mode — all of them hardware.
 
 ## Licence
 
-MIT. The DSP is Émilie Gillet's; see `LICENSE`. Cloudius is not a Mutable
+MIT. The DSP is Émilie Gillet's; see `LICENSE`. Skýjað is not a Mutable
 Instruments product and is not affiliated with or endorsed by them.

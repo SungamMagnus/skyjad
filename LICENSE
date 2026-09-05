@@ -1,5 +1,5 @@
-Cloudius
-========
+Skýjað
+======
 
 The DSP under eurorack/ is the Mutable Instruments Clouds firmware and stmlib,
 carried here essentially verbatim. It is used under its own licence, reproduced
@@ -28,7 +28,7 @@ below, and every file keeps the original header.
 Everything under Source/ and tools/ is the plug-in shell, released under the
 same MIT terms.
 
-Cloudius is not a Mutable Instruments product and is not endorsed by or
+Skýjað is not a Mutable Instruments product and is not endorsed by or
 affiliated with Mutable Instruments or Emilie Gillet. "Clouds" and "Mutable
 Instruments" are named here only to say where the DSP comes from.
 

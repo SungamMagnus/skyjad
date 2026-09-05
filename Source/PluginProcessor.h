@@ -39,7 +39,9 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override { return true; }
 
-    const juce::String getName() const override { return "Cloudius"; }
+    /* juce::String's `const char*` ctor assumes ASCII/Latin-1, not UTF-8 — an
+       accented literal needs CharPointer_UTF8 or it silently mangles. */
+    const juce::String getName() const override { return juce::CharPointer_UTF8 ("Skýjað"); }
     bool acceptsMidi() const override { return true; }
     bool producesMidi() const override { return false; }
     bool isMidiEffect() const override { return false; }

@@ -376,7 +376,7 @@ void CloudiusEditor::paint (juce::Graphics& g)
         /* Bottom-right corner: the credit, then the mark. */
         text (g, "after clouds", { 606.0f, y - 7.0f, 84.0f, 14.0f }, 7.4f, ink (0.32f),
               juce::Justification::right, false);
-        tracked (g, "CLOUDIUS", { contentR - 70.0f, y - 6.0f, 70.0f, 12.0f }, 8.5f,
+        tracked (g, juce::CharPointer_UTF8 ("SKÝJAÐ"), { contentR - 70.0f, y - 6.0f, 70.0f, 12.0f }, 8.5f,
                  ink (0.62f), 3.2f);
     }
 }
